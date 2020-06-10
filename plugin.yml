@@ -1,0 +1,23 @@
+name: Upload Sourcemaps to Sentry
+description: Upload Sourcemaps to Sentry
+author: @risepeopleinc
+requirements:
+  - docker
+configuration:
+  properties:
+    release_name:
+      type: string
+    sourcemaps_artifact:
+      type: string
+    auth_token:
+      type: string
+    org_name:
+      type: string
+    project:
+      type: string
+  required:
+    - sourcemaps_artifact
+    - release_name
+    - auth_token
+    - org_name
+    - project

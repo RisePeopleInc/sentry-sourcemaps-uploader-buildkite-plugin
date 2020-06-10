@@ -1,0 +1,24 @@
+#!/bin/bash
+
+set -eEuo pipefail
+
+# see https://docs.sentry.io/cli/configuration/#configuration-values
+export RELEASE_NAME=$BUILDKITE_PLUGIN_SENTRY_SOURCEMAPS_UPLOADER_RELEASE_NAME
+export SOURCEMAPS_ARTIFACT=$BUILDKITE_PLUGIN_SENTRY_SOURCEMAPS_UPLOADER_SOURCEMAPS_ARTIFACT
+export SENTRY_AUTH_TOKEN=$BUILDKITE_PLUGIN_SENTRY_SOURCEMAPS_UPLOADER_AUTH_TOKEN
+export SENTRY_ORG=$BUILDKITE_PLUGIN_SENTRY_SOURCEMAPS_UPLOADER_ORG_NAME
+export SENTRY_PROJECT=$BUILDKITE_PLUGIN_SENTRY_SOURCEMAPS_UPLOADER_PROJECT
+
+ROOT_DIR="$( dirname "${BASH_SOURCE[0]}" )"
+
+on_failure() {
+    echo "Command failed with exit status: $?"
+    exit $?
+}
+
+trap on_failure ERR
+
+[ -e "${SOURCEMAPS_ARTIFACT}" ] || buildkite-agent artifact download ${SOURCEMAPS_ARTIFACT}/* .
+
+$ROOT_DIR/sentry-cli releases new --finalize $RELEASE_NAME
+$ROOT_DIR/sentry-cli releases files $RELEASE_NAME upload-sourcemaps ${SOURCEMAPS_ARTIFACT}/*

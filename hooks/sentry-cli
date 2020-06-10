@@ -1,0 +1,17 @@
+#!/bin/bash
+
+set -eEuo pipefail
+
+DOCKER_REPO=getsentry/sentry-cli:latest
+
+set -x
+
+docker run --rm \
+  -v $(pwd):/work \
+  -e SENTRY_AUTH_TOKEN \
+  -e SENTRY_PROJECT \
+  -e SENTRY_ORG \
+  -e HTTP_PROXY \
+  -e HTTPS_PROXY \
+  $DOCKER_REPO $@
+
