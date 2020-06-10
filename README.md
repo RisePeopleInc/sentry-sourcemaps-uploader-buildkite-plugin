@@ -4,6 +4,8 @@ This plugin is used to upload sourcemaps to Sentry as private sourcemaps.
 
 An example of how to use this plugin is:
 
+To generate a sentry auth token, see https://docs.sentry.io/cli/configuration/
+
 ```
   - label: Upload Private SourceMaps to Sentry
     plugins:
