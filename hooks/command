@@ -3,7 +3,7 @@
 set -eEuo pipefail
 
 # see https://docs.sentry.io/cli/configuration/#configuration-values
-export RELEASE_NAME=$BUILDKITE_PLUGIN_SENTRY_SOURCEMAPS_UPLOADER_RELEASE_NAME
+export RELEASE_NAME=${BUILDKITE_PLUGIN_SENTRY_SOURCEMAPS_UPLOADER_RELEASE_NAME:-}
 export SOURCEMAPS_ARTIFACT=$BUILDKITE_PLUGIN_SENTRY_SOURCEMAPS_UPLOADER_SOURCEMAPS_ARTIFACT
 export SENTRY_AUTH_TOKEN=$BUILDKITE_PLUGIN_SENTRY_SOURCEMAPS_UPLOADER_AUTH_TOKEN
 export SENTRY_ORG=$BUILDKITE_PLUGIN_SENTRY_SOURCEMAPS_UPLOADER_ORG_NAME
@@ -20,5 +20,14 @@ trap on_failure ERR
 
 [ -e "${SOURCEMAPS_ARTIFACT}" ] || buildkite-agent artifact download ${SOURCEMAPS_ARTIFACT}/* .
 
-$ROOT_DIR/sentry-cli releases new --finalize $RELEASE_NAME
+if [ -z "$RELEASE_NAME" ]; then
+  RELEASE_NAME=$($ROOT_DIR/sentry-cli releases propose-version)
+fi
+$ROOT_DIR/sentry-cli releases new $RELEASE_NAME
+# allow set-commits to fail since some people won't have VCS integration setup
+if [ -e .git ]; then
+  $ROOT_DIR/sentry-cli releases set-commits "$RELEASE_NAME" --auto || true
+fi
 $ROOT_DIR/sentry-cli releases files $RELEASE_NAME upload-sourcemaps ${SOURCEMAPS_ARTIFACT}/*
+$ROOT_DIR/sentry-cli releases finalize "$RELEASE_NAME"
+

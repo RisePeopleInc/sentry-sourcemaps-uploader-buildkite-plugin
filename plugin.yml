@@ -17,7 +17,6 @@ configuration:
       type: string
   required:
     - sourcemaps_artifact
-    - release_name
     - auth_token
     - org_name
     - project
