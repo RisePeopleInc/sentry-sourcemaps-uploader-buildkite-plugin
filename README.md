@@ -9,10 +9,11 @@ To generate a sentry auth token, see https://docs.sentry.io/cli/configuration/
 ```
   - label: Upload Private SourceMaps to Sentry
     plugins:
-      - ssh://git@github.com:RisePeopleInc/sentry-sourcemaps-uploader-buildkite-plugin.git#master:
+      - ssh://git@github.com/RisePeopleInc/sentry-sourcemaps-uploader-buildkite-plugin.git#master:
           release_name: $BUILDKITE_COMMIT
           sourcemaps_artifact: sourcemaps/*
           auth_token: $SENTRY_AUTH_TOKEN
           project: foo
           org_name: risepeopleinc
 ```
+
