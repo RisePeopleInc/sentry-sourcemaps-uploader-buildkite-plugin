@@ -18,7 +18,7 @@ on_failure() {
 
 trap on_failure ERR
 
-[ -e "${SOURCEMAPS_ARTIFACT}" ] || buildkite-agent artifact download ${SOURCEMAPS_ARTIFACT}/* .
+[ -e "${SOURCEMAPS_ARTIFACT}" ] || buildkite-agent artifact download ${SOURCEMAPS_ARTIFACT} .
 
 if [ -z "$RELEASE_NAME" ]; then
   RELEASE_NAME=$($ROOT_DIR/sentry-cli releases propose-version)
