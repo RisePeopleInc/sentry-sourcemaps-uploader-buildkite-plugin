@@ -9,6 +9,11 @@ export SENTRY_AUTH_TOKEN=$BUILDKITE_PLUGIN_SENTRY_SOURCEMAPS_UPLOADER_AUTH_TOKEN
 export SENTRY_ORG=$BUILDKITE_PLUGIN_SENTRY_SOURCEMAPS_UPLOADER_ORG_NAME
 export SENTRY_PROJECT=$BUILDKITE_PLUGIN_SENTRY_SOURCEMAPS_UPLOADER_PROJECT
 
+export URL_PREFIX=""
+if [ ! -z $BUILDKITE_PLUGIN_SENTRY_SOURCEMAPS_UPLOADER_URL_PREFIX ]; then
+  export URL_PREFIX=" --url-prefix $BUILDKITE_PLUGIN_SENTRY_SOURCEMAPS_UPLOADER_URL_PREFIX"
+fi
+
 ROOT_DIR="$( dirname "${BASH_SOURCE[0]}" )"
 
 on_failure() {
@@ -28,6 +33,6 @@ $ROOT_DIR/sentry-cli releases new $RELEASE_NAME
 if [ -e .git ]; then
   $ROOT_DIR/sentry-cli releases set-commits "$RELEASE_NAME" --auto || true
 fi
-$ROOT_DIR/sentry-cli releases files $RELEASE_NAME upload-sourcemaps ${SOURCEMAPS_ARTIFACT}/*
+$ROOT_DIR/sentry-cli releases files $RELEASE_NAME upload-sourcemaps ${SOURCEMAPS_ARTIFACT}/* $URL_PREFIX
 $ROOT_DIR/sentry-cli releases finalize "$RELEASE_NAME"
 

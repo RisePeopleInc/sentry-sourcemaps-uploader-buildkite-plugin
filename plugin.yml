@@ -15,6 +15,8 @@ configuration:
       type: string
     project:
       type: string
+    url_prefix:
+      type: string
   required:
     - sourcemaps_artifact
     - auth_token
