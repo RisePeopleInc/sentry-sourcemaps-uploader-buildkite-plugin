@@ -17,3 +17,14 @@ To generate a sentry auth token, see https://docs.sentry.io/cli/configuration/
           org_name: risepeopleinc
 ```
 
+## Parameters
+
+| Paramater Name      | Is Required? | Description |
+| ------------------- | ------------ | ----------- |
+| release_name        |              | Release name to upload sourcemaps to. If not provided sentry will suggest one |
+| sourcemaps_artifact | Required     | Path to uploaded artifacts |
+| auth_token          | Required     | Sentry Auth Token, see https://docs.sentry.io/cli/configuration/ |
+| project             | Required     | Sentry Project Name |
+| org_name            | Required     | Sentry organization slug |
+| url_prefix          |              | Override url root, see https://docs.sentry.io/platforms/javascript/sourcemaps/#using-sentry-cli |
+
