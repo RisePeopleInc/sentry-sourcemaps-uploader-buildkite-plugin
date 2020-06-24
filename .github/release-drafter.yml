@@ -1,6 +1,6 @@
 # Config for https://github.com/apps/release-drafter
 template: |
-  ## TODO: Added/Removed/Fixed/Changed
+  ## Changes
 
   $CHANGES
 
@@ -11,6 +11,6 @@ template: |
   ```diff
   steps:
     - plugins:
-  -     jira#$PREVIOUS_TAG: ~
-  +     jira#TODO: ~
+  -     RisePeopleInc/sentry-sourcemaps-uploader#$PREVIOUS_TAG: ~
+  +     RisePeopleInc/sentry-sourcemaps-uploader#$NEXT_TAG: ~
   ```
