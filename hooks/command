@@ -1,5 +1,6 @@
 #!/bin/bash
 set -ueo pipefail
+set -x
 
 export SENTRY_AUTH_TOKEN=${SENTRY_AUTH_TOKEN:-}
 # see https://docs.sentry.io/cli/configuration/#configuration-values
