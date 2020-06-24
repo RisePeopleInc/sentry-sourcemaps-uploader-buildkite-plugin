@@ -28,7 +28,7 @@ steps:
 | ------------------- | ------------ | ----------- |
 | release_name        |              | Release name to upload sourcemaps to. If not provided sentry will suggest one |
 | sourcemaps_artifact | Required     | Path to uploaded artifacts |
-| auth_token          | Required     | Sentry Auth Token, see https://docs.sentry.io/cli/configuration/ |
+| auth_token          |              | Sentry Auth Token, see https://docs.sentry.io/cli/configuration/ - Will try to read from $SENTRY_AUTH_TOKEN if none is provided |
 | project             | Required     | Sentry Project Name |
 | org_name            | Required     | Sentry organization slug |
 | url_prefix          |              | Override url root, see https://docs.sentry.io/platforms/javascript/sourcemaps/#using-sentry-cli |

@@ -9,3 +9,9 @@ services:
     command: ['--id', 'RisePeopleInc/sentry-sourcemaps-uploader']
     volumes:
       - ".:/plugin:ro"
+  shell_check:
+    image: koalaman/shellcheck
+    command: ["--color=always", "/plugin/hooks/command"]
+    working_dir: /plugin
+    volumes:
+      - ".:/plugin:ro"
