@@ -1,6 +1,6 @@
 name: Upload Sourcemaps to Sentry
 description: Upload Sourcemaps to Sentry
-author: @risepeopleinc
+author: https://github.com/risepeopleinc
 requirements:
   - docker
 configuration:

@@ -1,23 +1,28 @@
-# Buildkite Plugin for Uploading sourcemaps to Sentry as private sourcemaps
+# Sentry Source Maps Uploader Buildkite Plugin
 
 This plugin is used to upload sourcemaps to Sentry as private sourcemaps.
 
-An example of how to use this plugin is:
+## Example
 
 To generate a sentry auth token, see https://docs.sentry.io/cli/configuration/
 
-```
+Add the following to your `pipeline.yml`:
+
+```yml
+
+steps:
   - label: Upload Private SourceMaps to Sentry
     plugins:
-      - RisePeopleInc/sentry-sourcemaps-uploader#master:
+      - RisePeopleInc/sentry-sourcemaps-uploader#v1.0.0:
           release_name: $BUILDKITE_COMMIT
           sourcemaps_artifact: sourcemaps/*
           auth_token: $SENTRY_AUTH_TOKEN
           project: foo
           org_name: risepeopleinc
+
 ```
 
-## Parameters
+## Configuration
 
 | Paramater Name      | Is Required? | Description |
 | ------------------- | ------------ | ----------- |
