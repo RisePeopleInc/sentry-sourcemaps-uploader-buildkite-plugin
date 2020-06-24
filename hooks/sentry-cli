@@ -6,8 +6,9 @@ DOCKER_REPO=getsentry/sentry-cli:latest
 
 set -x
 
+# shellcheck disable=SC2068
 docker run --rm \
-  -v $(pwd):/work \
+  -v "$(pwd):/work" \
   -e SENTRY_AUTH_TOKEN \
   -e SENTRY_PROJECT \
   -e SENTRY_ORG \

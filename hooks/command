@@ -10,8 +10,8 @@ export SENTRY_ORG=$BUILDKITE_PLUGIN_SENTRY_SOURCEMAPS_UPLOADER_ORG_NAME
 export SENTRY_PROJECT=$BUILDKITE_PLUGIN_SENTRY_SOURCEMAPS_UPLOADER_PROJECT
 
 export URL_PREFIX=""
-if [ ! -z ${BUILDKITE_PLUGIN_SENTRY_SOURCEMAPS_UPLOADER_URL_PREFIX:-} ]; then
-  export URL_PREFIX=" --url-prefix $BUILDKITE_PLUGIN_SENTRY_SOURCEMAPS_UPLOADER_URL_PREFIX"
+if [ -n "${BUILDKITE_PLUGIN_SENTRY_SOURCEMAPS_UPLOADER_URL_PREFIX:-}" ]; then
+  export URL_PREFIX="--url-prefix=$BUILDKITE_PLUGIN_SENTRY_SOURCEMAPS_UPLOADER_URL_PREFIX"
 fi
 
 ROOT_DIR="$( dirname "${BASH_SOURCE[0]}" )"
@@ -25,17 +25,17 @@ trap on_failure ERR
 
 set -x
 
-[ -e "${SOURCEMAPS_ARTIFACT}" ] || buildkite-agent artifact download ${SOURCEMAPS_ARTIFACT} .
+[ -e "${SOURCEMAPS_ARTIFACT}" ] || buildkite-agent artifact download "${SOURCEMAPS_ARTIFACT}" .
 
 if [ -z "$RELEASE_NAME" ]; then
   RELEASE_NAME=$(sentry-cli releases propose-version)
 fi
-sentry-cli releases new $RELEASE_NAME
+sentry-cli releases new "$RELEASE_NAME"
 # allow set-commits to fail since some people won't have VCS integration setup
 if [ -e .git ]; then
   sentry-cli releases set-commits "$RELEASE_NAME" --auto || true
 fi
-sentry-cli releases files $RELEASE_NAME upload-sourcemaps ${SOURCEMAPS_ARTIFACT}/* $URL_PREFIX
+sentry-cli releases files "$RELEASE_NAME" upload-sourcemaps "${SOURCEMAPS_ARTIFACT}/*" "$URL_PREFIX"
 sentry-cli releases finalize "$RELEASE_NAME"
 
 echo "All Done"
