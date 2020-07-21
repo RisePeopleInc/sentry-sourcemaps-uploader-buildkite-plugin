@@ -13,7 +13,7 @@ Add the following to your `pipeline.yml`:
 steps:
   - label: Upload Private SourceMaps to Sentry
     plugins:
-      - RisePeopleInc/sentry-sourcemaps-uploader#v1.0.0:
+      - RisePeopleInc/sentry-sourcemaps-uploader#v1.1.0:
           release_name: $BUILDKITE_COMMIT
           sourcemaps_artifact: sourcemaps/*
           auth_token: $SENTRY_AUTH_TOKEN
