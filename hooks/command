@@ -40,7 +40,7 @@ sentry-cli releases new "$RELEASE_NAME"
 if [ -e .git ]; then
   sentry-cli releases set-commits "$RELEASE_NAME" --auto || true
 fi
-sentry-cli releases files "$RELEASE_NAME" upload-sourcemaps "${SOURCEMAPS_ARTIFACT}/*" "$URL_PREFIX"
+sentry-cli releases files "$RELEASE_NAME" upload-sourcemaps "${SOURCEMAPS_ARTIFACT}" "$URL_PREFIX"
 sentry-cli releases finalize "$RELEASE_NAME"
 
 echo "All Done"
