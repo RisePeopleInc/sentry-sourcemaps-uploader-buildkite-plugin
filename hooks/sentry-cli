@@ -14,5 +14,5 @@ docker run --rm \
   -e SENTRY_ORG \
   -e HTTP_PROXY \
   -e HTTPS_PROXY \
-  $DOCKER_REPO "$*"
+  $DOCKER_REPO "$@"
 
