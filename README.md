@@ -32,4 +32,6 @@ steps:
 | project             | Required     | Sentry Project Name |
 | org_name            | Required     | Sentry organization slug |
 | url_prefix          |              | Override url root, see https://docs.sentry.io/platforms/javascript/sourcemaps/#using-sentry-cli |
+| strip_prefix        |              | Remove part of the url for matching purposes https://docs.sentry.io/platforms/javascript/sourcemaps/#using-sentry-cli |
+| upload_subdirectory |              | Directory to change to inside of archives, ex dist/ |
 

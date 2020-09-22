@@ -1,4 +1,4 @@
-name: Upload Sourcemaps to Sentry
+name: sentry-sourcemaps-uploader-buildkite-plugin
 description: Upload Sourcemaps to Sentry
 author: https://github.com/risepeopleinc
 requirements:
@@ -16,6 +16,10 @@ configuration:
     project:
       type: string
     url_prefix:
+      type: string
+    strip_prefix:
+      type: string
+    upload_subdirectory:
       type: string
   required:
     - sourcemaps_artifact

@@ -4,6 +4,8 @@ set -ueo pipefail
 export SENTRY_AUTH_TOKEN=${SENTRY_AUTH_TOKEN:-}
 # see https://docs.sentry.io/cli/configuration/#configuration-values
 export RELEASE_NAME=${BUILDKITE_PLUGIN_SENTRY_SOURCEMAPS_UPLOADER_RELEASE_NAME:-}
+export STRIP_PREFIX=${BUILDKITE_PLUGIN_SENTRY_SOURCEMAPS_UPLOADER_STRIP_PREFIX:-}
+export UPLOAD_SUBDIRECTORY=${BUILDKITE_PLUGIN_SENTRY_SOURCEMAPS_UPLOADER_UPLOAD_SUBDIRECTORY:-}
 export SENTRY_AUTH_TOKEN=${BUILDKITE_PLUGIN_SENTRY_SOURCEMAPS_UPLOADER_AUTH_TOKEN:-$SENTRY_AUTH_TOKEN}
 export SOURCEMAPS_ARTIFACT=$BUILDKITE_PLUGIN_SENTRY_SOURCEMAPS_UPLOADER_SOURCEMAPS_ARTIFACT
 export SENTRY_ORG=$BUILDKITE_PLUGIN_SENTRY_SOURCEMAPS_UPLOADER_ORG_NAME
@@ -30,7 +32,8 @@ trap on_failure ERR
 
 set -x
 
-[ -e "${SOURCEMAPS_ARTIFACT}" ] || buildkite-agent artifact download "${SOURCEMAPS_ARTIFACT}" .
+mkdir -p downloaded_artifacts
+buildkite-agent artifact download "${SOURCEMAPS_ARTIFACT}" downloaded_artifacts
 
 if [ -z "$RELEASE_NAME" ]; then
   RELEASE_NAME=$(sentry-cli releases propose-version)
@@ -40,7 +43,7 @@ sentry-cli releases new "$RELEASE_NAME"
 if [ -e .git ]; then
   sentry-cli releases set-commits "$RELEASE_NAME" --auto || true
 fi
-sentry-cli releases files "$RELEASE_NAME" upload-sourcemaps "${SOURCEMAPS_ARTIFACT}" "$URL_PREFIX"
+sentry-cli releases files "$RELEASE_NAME" upload-sourcemaps "downloaded_artifacts/${UPLOAD_SUBDIRECTORY}" "--strip-prefix=downloaded_artifacts/${STRIP_PREFIX}" "$URL_PREFIX"
 sentry-cli releases finalize "$RELEASE_NAME"
 
 echo "All Done"
