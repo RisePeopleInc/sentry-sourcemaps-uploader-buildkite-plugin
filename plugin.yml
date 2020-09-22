@@ -17,6 +17,8 @@ configuration:
       type: string
     url_prefix:
       type: string
+    strip_prefix:
+      type: string
   required:
     - sourcemaps_artifact
     - org_name

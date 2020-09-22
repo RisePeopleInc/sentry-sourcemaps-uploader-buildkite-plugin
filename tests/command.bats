@@ -9,18 +9,48 @@ load '/usr/local/lib/bats/load.bash'
   export BUILDKITE_PLUGIN_SENTRY_SOURCEMAPS_UPLOADER_PROJECT="some-project"
 
   stub buildkite-agent \
-    "artifact download sourcemaps/* . : echo "
+    "artifact download sourcemaps/* downloaded_artifacts : echo Downloaded Artifacts"
 
   stub sentry-cli \
     "releases propose-version : echo fakeversion" \
     "releases new fakeversion : echo" \
     "releases set-commits fakeversion --auto : echo" \
-    "releases files fakeversion upload-sourcemaps sourcemaps/* : echo" \
+    "releases files fakeversion upload-sourcemaps downloaded_artifacts/ --strip-prefix=downloaded_artifacts/ '' : echo Uploaded Files" \
     "releases finalize fakeversion : echo"
 
   run "$PWD/hooks/command"
 
   assert_success
+  assert_output --partial "Downloaded Artifacts"
+  assert_output --partial "Uploaded Files"
+  assert_output --partial "All Done"
+
+  unstub buildkite-agent
+  unstub sentry-cli
+}
+
+@test "Uploads sourcemaps to buildkite - Supports extra strip prefix" {
+  export BUILDKITE_PLUGIN_SENTRY_SOURCEMAPS_UPLOADER_AUTH_TOKEN="faketoken"
+  export BUILDKITE_PLUGIN_SENTRY_SOURCEMAPS_UPLOADER_SOURCEMAPS_ARTIFACT="sourcemaps/*"
+  export BUILDKITE_PLUGIN_SENTRY_SOURCEMAPS_UPLOADER_ORG_NAME="some-org"
+  export BUILDKITE_PLUGIN_SENTRY_SOURCEMAPS_UPLOADER_PROJECT="some-project"
+  export BUILDKITE_PLUGIN_SENTRY_SOURCEMAPS_UPLOADER_STRIP_PREFIX="strippie/"
+
+  stub buildkite-agent \
+    "artifact download sourcemaps/* downloaded_artifacts : echo Downloaded Artifacts"
+
+  stub sentry-cli \
+    "releases propose-version : echo fakeversion" \
+    "releases new fakeversion : echo" \
+    "releases set-commits fakeversion --auto : echo" \
+    "releases files fakeversion upload-sourcemaps downloaded_artifacts/ --strip-prefix=downloaded_artifacts/strippie/ '' : echo Uploaded Files" \
+    "releases finalize fakeversion : echo"
+
+  run "$PWD/hooks/command"
+
+  assert_success
+  assert_output --partial "Downloaded Artifacts"
+  assert_output --partial "Uploaded Files"
   assert_output --partial "All Done"
 
   unstub buildkite-agent
@@ -34,18 +64,20 @@ load '/usr/local/lib/bats/load.bash'
   export BUILDKITE_PLUGIN_SENTRY_SOURCEMAPS_UPLOADER_PROJECT="some-project"
 
   stub buildkite-agent \
-    "artifact download sourcemaps/* . : echo "
+    "artifact download sourcemaps/* downloaded_artifacts : echo Downloaded Artifacts"
 
   stub sentry-cli \
     "releases propose-version : echo fakeversion" \
     "releases new fakeversion : echo" \
     "releases set-commits fakeversion --auto : echo" \
-    "releases files fakeversion upload-sourcemaps sourcemaps/* : echo" \
+    "releases files fakeversion upload-sourcemaps downloaded_artifacts/ --strip-prefix=downloaded_artifacts/ '' : echo Uploaded Files" \
     "releases finalize fakeversion : echo"
 
   run "$PWD/hooks/command"
 
   assert_success
+  assert_output --partial "Downloaded Artifacts"
+  assert_output --partial "Uploaded Files"
   assert_output --partial "All Done"
 
   unstub buildkite-agent
