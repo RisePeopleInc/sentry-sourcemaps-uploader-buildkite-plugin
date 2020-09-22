@@ -19,6 +19,8 @@ configuration:
       type: string
     strip_prefix:
       type: string
+    upload_subdirectory:
+      type: string
   required:
     - sourcemaps_artifact
     - org_name
