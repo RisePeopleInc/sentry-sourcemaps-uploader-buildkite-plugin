@@ -8,6 +8,9 @@ load '/usr/local/lib/bats/load.bash'
   export BUILDKITE_PLUGIN_SENTRY_SOURCEMAPS_UPLOADER_ORG_NAME="some-org"
   export BUILDKITE_PLUGIN_SENTRY_SOURCEMAPS_UPLOADER_PROJECT="some-project"
 
+  stub mkdir \
+    "-p downloaded_artifacts : echo Made Directory"
+
   stub buildkite-agent \
     "artifact download sourcemaps/* downloaded_artifacts : echo Downloaded Artifacts"
 
@@ -21,10 +24,12 @@ load '/usr/local/lib/bats/load.bash'
   run "$PWD/hooks/command"
 
   assert_success
+  assert_output --partial "Made Directory"
   assert_output --partial "Downloaded Artifacts"
   assert_output --partial "Uploaded Files"
   assert_output --partial "All Done"
 
+  unstub mkdir
   unstub buildkite-agent
   unstub sentry-cli
 }
@@ -35,6 +40,9 @@ load '/usr/local/lib/bats/load.bash'
   export BUILDKITE_PLUGIN_SENTRY_SOURCEMAPS_UPLOADER_ORG_NAME="some-org"
   export BUILDKITE_PLUGIN_SENTRY_SOURCEMAPS_UPLOADER_PROJECT="some-project"
   export BUILDKITE_PLUGIN_SENTRY_SOURCEMAPS_UPLOADER_STRIP_PREFIX="strippie/"
+
+  stub mkdir \
+    "-p downloaded_artifacts : echo Made Directory"
 
   stub buildkite-agent \
     "artifact download sourcemaps/* downloaded_artifacts : echo Downloaded Artifacts"
@@ -49,10 +57,12 @@ load '/usr/local/lib/bats/load.bash'
   run "$PWD/hooks/command"
 
   assert_success
+  assert_output --partial "Made Directory"
   assert_output --partial "Downloaded Artifacts"
   assert_output --partial "Uploaded Files"
   assert_output --partial "All Done"
 
+  unstub mkdir
   unstub buildkite-agent
   unstub sentry-cli
 }
@@ -62,6 +72,9 @@ load '/usr/local/lib/bats/load.bash'
   export BUILDKITE_PLUGIN_SENTRY_SOURCEMAPS_UPLOADER_SOURCEMAPS_ARTIFACT="sourcemaps/*"
   export BUILDKITE_PLUGIN_SENTRY_SOURCEMAPS_UPLOADER_ORG_NAME="some-org"
   export BUILDKITE_PLUGIN_SENTRY_SOURCEMAPS_UPLOADER_PROJECT="some-project"
+
+  stub mkdir \
+    "-p downloaded_artifacts : echo Made Directory"
 
   stub buildkite-agent \
     "artifact download sourcemaps/* downloaded_artifacts : echo Downloaded Artifacts"
@@ -76,10 +89,12 @@ load '/usr/local/lib/bats/load.bash'
   run "$PWD/hooks/command"
 
   assert_success
+  assert_output --partial "Made Directory"
   assert_output --partial "Downloaded Artifacts"
   assert_output --partial "Uploaded Files"
   assert_output --partial "All Done"
 
+  unstub mkdir
   unstub buildkite-agent
   unstub sentry-cli
 }
